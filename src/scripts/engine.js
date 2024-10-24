@@ -2,7 +2,7 @@ const state ={
     score: {
         playerScore: 0,
         computerScore: 0,
-        scoreBox: document.getElementById("score_points"),
+        scoreBox: document.getElementById("score-points"),
     },
     cardSprites:{
         avatar: document.getElementById("card-image"),
@@ -11,7 +11,7 @@ const state ={
     },
     fieldCards:{
         player: document.getElementById("player-field-card"),
-        player: document.getElementById("computer-field-card"),
+        computer: document.getElementById("computer-field-card"),
     },
     actions: {
         button: document.getElementById("next-duel"),
@@ -23,7 +23,7 @@ const playerSides = {
     computer: "computer-cards",
 }
 
-const pathImages = "./src/assets/icons";
+const pathImages = "./src/assets/icons/";
 
 const cardData = [
     {
@@ -36,9 +36,9 @@ const cardData = [
     },
     {
         id:1,
-        name: "Blue Eyes White Dragon",
+        name: "Magician",
         type: "Rock",
-        img: `${pathImages}dragon.png`,
+        img: `${pathImages}magician.png`,
         WinOf: [2],
         LoseOf: [0],
     },
@@ -57,6 +57,12 @@ async function getRandomCardId(){
     return cardData[randomIndex].id;
 }
 
+async function drawSelectCards(index){
+    state.cardSprites.avatar.src = cardData[index].img;
+    state.cardSprites.name.innerText = cardData[index].name;
+    state.cardSprites.type.innerText = "Attribute :" + cardData[index].type;
+}
+
 async function createCardImage(IdCard, fieldSide) {
     const cardImage = document.createElement("img");
     cardImage.setAttribute("height", "100px");
@@ -68,11 +74,12 @@ async function createCardImage(IdCard, fieldSide) {
         cardImage.addEventListener("click", ()=>{
             setCardsField(cardImage.getAttribute("data-id"));
         })
+        cardImage.addEventListener("mouseover", () => {
+            drawSelectCards(IdCard);
+        })
     }
 
-    cardImage.addEventListener("mouseover", () => {
-        drawSelectCards(IdCard);
-    })
+   
 
     return cardImage;
 }
