@@ -121,6 +121,21 @@ async function updateScore(){
     state.score.scoreBox.innerText = `Win: ${state.score.playerScore} | Lose: ${state.score.computerScore}`;
 }
 
+async function resetDuel() {
+    state.cardSprites.avatar.src = "";
+    state.actions.button.style.display = "none";
+
+    state.fieldCards.player.style.display = "none";
+    state.fieldCards.computer.style.display = "none";
+
+    init();
+}
+
+async function playAudio(status){
+    const audio = new Audio(`./src/assets/audios/${status}.wav`);
+    audio.play();
+}
+
 async function removeAllCardsImages() {
     let {computerBOX, player1BOX} = state.playerSides;
 
@@ -133,17 +148,19 @@ async function removeAllCardsImages() {
 }
 
 async function checkDuelResults(playerCardId, computerCardId){
-    let duelResults = "Empate";
+    let duelResults = "Draw";
     let playerCard = cardData[playerCardId];
     
 
     if(playerCard.WinOf.includes(computerCardId)){
-        duelResults = "Ganhou";
+        duelResults = "Win";
+        await playAudio(duelResults);
         state.score.playerScore++;
     }
 
     if(playerCard.LoseOf.includes(computerCardId)){
-        duelResults = "Perdeu";
+        duelResults = "Lose";
+        await playAudio(duelResults);
         state.score.computerScore++;
     }
 
